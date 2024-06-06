@@ -12,11 +12,12 @@ reviewer -> developer: Review
 reviewer --> github: Review
 github -> action: Review
 action -> llm: Report, Problems, Validate
-alt Review doesn't contain problems
+llm -> action: Problems
+alt Problems are empty
 action -> github: Success
 action -> reviewer: Thank you for review
 end
-alt Review contains problems
+alt Problems aren't empty
 action -> llm: Ask for suggestions
 llm -> action: Suggestions
 action -> github: Fail, Suggestions
