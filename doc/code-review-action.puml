@@ -1,0 +1,34 @@
+@startuml
+actor Developer as developer
+actor Reviewer as reviewer
+database Repository as repository
+participant GitHub as github
+participant Action as action
+participant LLM as llm
+
+developer -> reviewer: Pull Request
+reviewer -> developer: Review
+reviewer --> github: Review
+github -> action: Review
+action -> llm: Report, Problems, Validate
+alt Review doesn't contain problems
+action -> github: Success
+action -> reviewer: Thank you for review
+end
+alt Review contains problems
+action -> llm: Ask for suggestions
+llm -> action: Suggestions
+action -> github: Fail, Suggestions
+github --> reviewer: Suggestions
+reviewer -> developer: Better Review
+end
+alt Review was passed
+reviewer -> repository: Merge Pull Request
+reviewer -> developer: Thanks you for Pull Request
+end
+alt Review was failed
+reviewer -> developer: Comments
+developer -> developer: Fixes in Pull Request
+developer -> reviewer: Fixed Pull Request
+end
+@enduml
