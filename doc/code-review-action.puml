@@ -2,31 +2,31 @@
 @startuml
 actor Developer as developer
 actor Reviewer as reviewer
-database Repository as repository
 participant GitHub as github
-participant Action as action
+participant Workflow as workflow
+database Repository as repository
 participant LLM as llm
 
 developer -> reviewer: Pull Request
 reviewer -> developer: Review
 reviewer --> github: Review
-github -> action: Review
-action -> llm: Report, Problems, Validate
-llm -> action: Problems
+github -> workflow: Review
+workflow -> llm: Report, Problems, Validate
+llm --> workflow: Problems
 alt Problems are empty
-action -> github: Success
-action -> reviewer: Thank you for review
+workflow --> github: Success
+workflow --> reviewer: Thank you for review
 end
 alt Problems aren't empty
-action -> llm: Ask for suggestions
-llm -> action: Suggestions
-action -> github: Fail, Suggestions
+workflow -> llm: Ask for suggestions
+llm --> workflow: Suggestions
+workflow --> github: Fail, Suggestions
 github --> reviewer: Suggestions
 reviewer -> developer: Better Review
 end
 alt Review was passed
 reviewer -> repository: Merge Pull Request
-reviewer -> developer: Thanks you for Pull Request
+reviewer -> developer: Thanks for Pull Request
 end
 alt Review was failed
 reviewer -> developer: Comments
